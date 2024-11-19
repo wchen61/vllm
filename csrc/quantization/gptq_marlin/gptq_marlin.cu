@@ -1410,6 +1410,10 @@ __global__ void Marlin(
       for (int k = 0; k < th_size; k++) {
         sh[threadIdx.x] =
             C_tmp[c_cur_offset + active_threads * k + threadIdx.x];
+        cp_async4(&sh[threadIdx.x],
+                  &C_tmp[c_cur_offset + active_threads * k + threadIdx.x]);
+        cp_async_fence();
+        cp_async_wait<0>();
 
         float* sh_c_ptr = reinterpret_cast<float*>(&sh[threadIdx.x]);
   #pragma unroll
